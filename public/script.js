@@ -5,13 +5,15 @@ const videoGrid = document.getElementById('video-grid')
 //   port: '3001'
 // })
 
-const myPeer = new Peer({
-  key: 'peerjs',
-  host: 'mysterious-cliffs-71245.herokuapp.com',
-  port: 443,
-  path: '/',
-  secure: true,
-})
+// const myPeer = new Peer({
+//   key: 'peerjs',
+//   host: 'mysterious-cliffs-71245.herokuapp.com',
+//   port: 443,
+//   path: '/',
+//   secure: true,
+// })
+
+const myPeer = new peers();
 
 const myVideo = document.createElement('video')
 myVideo.muted = true
