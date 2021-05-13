@@ -26,4 +26,7 @@ io.on('connection', socket => {
   })
 })
 
-server.listen(3000)
+var port = process.env.PORT || 3000;
+app.listen(port, function () {
+    console.log('Server has started on PORT : ' + port);
+});
