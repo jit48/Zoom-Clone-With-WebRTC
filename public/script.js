@@ -13,7 +13,7 @@ const myPeer = new Peer({
   //secure: true,
 });
 
-const myPeer = new peers();
+// const myPeer = new peers();
 
 const myVideo = document.createElement('video')
 myVideo.muted = true
