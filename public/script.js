@@ -5,13 +5,7 @@ const videoGrid = document.getElementById('video-grid')
 //   port: '3001'
 // })
 
-var myPeer = new Peer(undefined, {
-  path: '/peerjs',
-  host: '/',
-  port: '443'
-});
-
-// const myPeer = new peers();
+myPeer = new Peer(undefined, {})
 
 const myVideo = document.createElement('video')
 myVideo.muted = true
@@ -39,7 +33,6 @@ navigator.mediaDevices.getUserMedia({
     const fc = () => connectToNewUser(userId, stream)
     timerid = setTimeout(fc, 1000 )
     })
-    
 })
 
 socket.on('user-disconnected', userId => {
