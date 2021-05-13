@@ -6,6 +6,7 @@ const videoGrid = document.getElementById('video-grid')
 // })
 
 myPeer = new Peer(undefined, {})
+let ownVideo;
 
 const myVideo = document.createElement('video')
 myVideo.muted = true
@@ -14,6 +15,8 @@ navigator.mediaDevices.getUserMedia({
   video: true,
   audio: true
 }).then(stream => {
+
+  ownVideo = stream;
   addVideoStream(myVideo, stream)
 
   myPeer.on('call', call => {
@@ -24,9 +27,6 @@ navigator.mediaDevices.getUserMedia({
     })
   })
 
-  // socket.on('user-connected', userId => {
-  //   connectToNewUser(userId, stream)
-  // })
 
   socket.on('user-connected', userId => {
     console.log('New User Connected: ' + userId)
@@ -63,3 +63,19 @@ function addVideoStream(video, stream) {
   })
   videoGrid.append(video)
 }
+
+
+const btn = document.getElementById("mute/unmute");
+
+const muteUnmute = () =>{
+    if(ownVideo.getAudioTracks()[0].enabled){
+      ownVideo.getAudioTracks()[0].enabled = false;
+      btn.innerHTML="Unmute";
+    }
+    else{
+      ownVideo.getAudioTracks()[0].enabled = true;
+      btn.innerHTML="Mute"
+    }
+}
+
+btn.addEventListener('click', muteUnmute);
