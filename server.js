@@ -19,10 +19,12 @@ io.on('connection', socket => {
   socket.on('join-room', (roomId, userId) => {
     socket.join(roomId)
     socket.broadcast.to(roomId).emit('user-connected', userId)
-
-    socket.on('disconnect', () => {
-      socket.broadcast.to(roomId).emit('user-connected', userId)
-    })
+    socket.on("chat-msg", function (data) {
+      io.to(roomId).emit("chat-msg", data);
+    });
+    // socket.on('disconnect', () => {
+    //   socket.broadcast.to(roomId).emit('user-connected', userId)
+    // })
   })
 })
 

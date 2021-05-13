@@ -79,3 +79,40 @@ const muteUnmute = () =>{
 }
 
 btn.addEventListener('click', muteUnmute);
+
+
+const pause = document.getElementById("pause");
+
+const pauseVideo = () => {
+  if(ownVideo.getVideoTracks()[0].enabled){
+      ownVideo.getVideoTracks()[0].enabled = false;
+      pause.innerHTML="Resume";
+  }
+  else {
+      ownVideo.getVideoTracks()[0].enabled = true;
+      pause.innerHTML = "Pause";
+  }
+}
+
+
+pause.addEventListener('click', pauseVideo)
+
+
+var send = document.getElementById("send");
+var message = document.getElementById("message");
+var output = document.getElementById("output");
+var handle = document.getElementById("handle");
+
+send.addEventListener('click', function(){
+  socket.emit("chat-msg", {
+    message: message.value,
+    handle: handle.value
+    });
+
+    message.value = '';
+});
+
+socket.on("chat-msg", function (data) {
+  output.innerHTML +=
+    "<p><strong>" + data.handle + ":</strong>" + data.message + "</p>";
+});
