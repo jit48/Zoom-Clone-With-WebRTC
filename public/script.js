@@ -7,6 +7,7 @@ const videoGrid = document.getElementById('video-grid')
 
 myPeer = new Peer(undefined, {})
 let ownVideo;
+let currentPeer;
 
 const myVideo = document.createElement('video')
 myVideo.muted = true
@@ -24,6 +25,7 @@ navigator.mediaDevices.getUserMedia({
     const video = document.createElement('video')
     call.on('stream', userVideoStream => {
       addVideoStream(video, userVideoStream)
+      currentPeer = call.peerConnection
     })
   })
 
@@ -48,6 +50,7 @@ function connectToNewUser(userId, stream) {
   const video = document.createElement('video')
   call.on('stream', userVideoStream => {
     addVideoStream(video, userVideoStream)
+    currentPeer = call.peerConnection
   })
   call.on('close', () => {
     video.remove()
@@ -116,3 +119,35 @@ socket.on("chat-msg", function (data) {
   output.innerHTML +=
     "<p><strong>" + data.handle + ":</strong>" + data.message + "</p>";
 });
+
+document.getElementById("shareScreen").addEventListener('click', (e) => {
+  navigator.mediaDevices.getDisplayMedia({
+    video: {
+      cursor: "always"
+    },
+    audio: {
+      echoCancellation: true,
+      noiseSuppression: true
+    }
+  }).then((stream) => {
+      let vid = stream.getVideoTracks()[0];
+      vid.onended =function(){
+        shareStop();
+      }
+      let send = currentPeer.getSenders().find(function(s){
+        return s.track.kind == vid.kind
+      })
+      send.replaceTrack(vid)
+  }).catch((error) => {
+      console.log(error);
+  })
+})
+
+function shareStop() {
+    let vid = ownVideo.getVideoTracks()[0];
+    let send = currentPeer.getSenders().find(function(s){
+      return s.track.kind == vid.kind;
+    })
+
+    send.replaceTrack(vid);
+}
