@@ -22,9 +22,9 @@ io.on('connection', socket => {
     socket.on("chat-msg", function (data) {
       io.to(roomId).emit("chat-msg", data);
     });
-    // socket.on('disconnect', () => {
-    //   socket.broadcast.to(roomId).emit('user-connected', userId)
-    // })
+    socket.on('disconnect', () => {
+      socket.broadcast.to(roomId).emit('user-connected', userId)
+    })
   })
 })
 
